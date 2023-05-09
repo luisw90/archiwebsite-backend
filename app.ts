@@ -1,4 +1,6 @@
 const express = require("express");
+const cors = require("cors");
+const { json } = require("express");
 import { Request, Response, Application, NextFunction } from "express";
 import {
   getAllItems,
@@ -9,6 +11,9 @@ import {
 } from "./db/index";
 
 const app: Application = express();
+
+app.use(cors());
+app.use(json());
 
 const checkId = async (req: Request, res: Response, next: NextFunction) => {
   const id = req.params.itemId!.toString();

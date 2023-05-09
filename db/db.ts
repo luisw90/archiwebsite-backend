@@ -15,9 +15,9 @@ const getAllItemsDb = async () => {
   await client.connect();
   const db: mongoDB.Db = client.db(`${database}`);
   const col: mongoDB.Collection = db.collection(`${itemCollection}`);
-  const data = await col.find({}).toArray();
+  const data = await col.find().toArray();
   await client.close();
-  return data[0];
+  return data;
 };
 
 const getItemDb = async (id: string) => {
