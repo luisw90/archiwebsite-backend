@@ -1,4 +1,5 @@
 import db from "./db";
+import { ArchiItem } from "../Types";
 
 const getAllItems = async () => {
   const getitems = await db.getAllItemsDb();
@@ -10,13 +11,13 @@ const getItem = async (id: string) => {
   return getitem;
 };
 
-const saveItem = async () => {
-  const saveitem = await db.saveItemDb();
+const saveItem = async (item: ArchiItem) => {
+  const saveitem = await db.saveItemDb(item);
   return saveitem;
 };
 
-const updateItem = async (id: string) => {
-  const updateitem = await db.updateItemDb(id);
+const updateItem = async (id: string, item: ArchiItem) => {
+  const updateitem = await db.updateItemDb(id, item);
   return updateitem;
 };
 

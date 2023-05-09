@@ -19,14 +19,14 @@ const checkId = async (req: Request, res: Response, next: NextFunction) => {
 };
 
 //return a list of all
-app.get("/api", async (_req: Request, res: Response) => {
+app.get("/api/arch", async (_req: Request, res: Response) => {
   const data = await getAllItems();
   return res.status(200).json(data);
 });
 
 //return one puppy in json format
-app.get("/api/:itemId", async (req: Request, res: Response) => {
-  const id = req.params.itemId!.toString();
+app.get("/api/arch/:id", async (req: Request, res: Response) => {
+  const id = req.params.id!.toString();
   if (id) {
     const data = await getItem(id);
     return res.status(200).json(data);
@@ -35,30 +35,28 @@ app.get("/api/:itemId", async (req: Request, res: Response) => {
 });
 
 //create and return added puppy
-app.post("/api", async (req: Request, res: Response) => {
-  const id = req.params.itemId!.toString();
-  if (id) {
-    const data = await getItem(id);
-    return res.status(200).json(data);
-  }
-  return res.status(400).json({ message: "Bad request" });
+app.post("/api/arch", async (req: Request, res: Response) => {
+  const item = req.body;
+  const data = await saveItem(item);
+  return res.status(200).json(data);
 });
 
 //Update specifik puppy
-app.put("/api/:userId", async (req: Request, res: Response) => {
-  const id = req.params.itemId!.toString();
-  if (id) {
-    const data = await getItem(id);
+app.put("/api/arch/:id", async (req: Request, res: Response) => {
+  const id = req.params.id!.toString();
+  const item = req.body;
+  if (id && item) {
+    const data = await updateItem(id, item);
     return res.status(200).json(data);
   }
   return res.status(400).json({ message: "Bad request" });
 });
 
 //Delete puppy
-app.put("/api/:userId", async (req: Request, res: Response) => {
-  const id = req.params.itemId!.toString();
+app.put("/api/arch/:id", async (req: Request, res: Response) => {
+  const id = req.params.id!.toString();
   if (id) {
-    const data = await getItem(id);
+    const data = await deleteItem(id);
     return res.status(200).json(data);
   }
   return res.status(400).json({ message: "Bad request" });
