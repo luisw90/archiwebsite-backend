@@ -58,7 +58,7 @@ app.put("/api/arch/:id", async (req: Request, res: Response) => {
 });
 
 //Delete puppy
-app.put("/api/arch/:id", async (req: Request, res: Response) => {
+app.delete("/api/arch/:id", async (req: Request, res: Response) => {
   const id = req.params.id!.toString();
   if (id) {
     const data = await deleteItem(id);

@@ -1,8 +1,7 @@
 type ArchiItem = {
-  id: string;
   title: string;
-  architect: string;
   description: string;
+  date?: string;
   image: string;
 };
 

@@ -1,6 +1,8 @@
 import * as mongoDB from "mongodb";
 require("dotenv").config();
 import { ArchiItem } from "../Types";
+import { v4 } from "uuid";
+import { ObjectId } from "mongodb";
 
 const database = process.env.DATABASE;
 const itemCollection = process.env.COLLECTION;
@@ -25,22 +27,23 @@ const getItemDb = async (id: string) => {
   await client.connect();
   const db: mongoDB.Db = client.db(`${database}`);
   const col: mongoDB.Collection = db.collection(`${itemCollection}`);
-  const data = await col.find({ id: `${id}` }).toArray();
+  const data = await col.find({ _id: new ObjectId(`${id}`) }).toArray();
   await client.close();
   return data[0];
 };
+
 const saveItemDb = async (item: ArchiItem) => {
   const client: mongoDB.MongoClient = new mongoDB.MongoClient(dbPath);
   await client.connect();
   const db: mongoDB.Db = client.db(`${database}`);
   const col: mongoDB.Collection = db.collection(`${itemCollection}`);
-  const data = await col.insertOne({
-    id: item.id,
+  const createItem: ArchiItem = {
     title: item.title,
-    architect: item.architect,
     description: item.description,
+    date: item.date,
     image: item.image,
-  });
+  };
+  const data = (await col.insertOne(createItem)).insertedId;
   await client.close();
   return data;
 };
@@ -50,14 +53,19 @@ const updateItemDb = async (id: string, item: ArchiItem) => {
   await client.connect();
   const db: mongoDB.Db = client.db(`${database}`);
   const col: mongoDB.Collection = db.collection(`${itemCollection}`);
+  const updateItem: ArchiItem = {
+    title: item.title,
+    description: item.description,
+    image: item.image,
+  };
   const data = await col.updateOne(
-    { id: `${id}` },
+    { _id: new ObjectId(`${id}`) },
     {
-      id: item.id,
-      title: item.title,
-      architect: item.architect,
-      description: item.description,
-      image: item.image,
+      $set: {
+        title: item.title,
+        description: item.description,
+        image: item.image,
+      },
     }
   );
   await client.close();
@@ -69,7 +77,7 @@ const deleteItemDb = async (id: string) => {
   await client.connect();
   const db: mongoDB.Db = client.db(`${database}`);
   const col: mongoDB.Collection = db.collection(`${itemCollection}`);
-  const data = await col.deleteOne({ id: `${id}` });
+  const data = await col.deleteOne({ _id: new ObjectId(`${id}`) });
   await client.close();
   return data;
 };
