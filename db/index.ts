@@ -1,6 +1,11 @@
 import db from "./db";
 import { ArchiItem } from "../Types";
 
+const getAllTeam = async () => {
+  const getitems = await db.getAllTeamDb();
+  return getitems;
+};
+
 const getAllItems = async () => {
   const getitems = await db.getAllItemsDb();
   return getitems;
@@ -26,4 +31,4 @@ const deleteItem = async (id: string) => {
   return deleteitem;
 };
 
-export { getAllItems, getItem, saveItem, updateItem, deleteItem };
+export { getAllItems, getItem, saveItem, updateItem, deleteItem, getAllTeam };

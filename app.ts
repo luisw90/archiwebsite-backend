@@ -8,6 +8,7 @@ import {
   saveItem,
   updateItem,
   deleteItem,
+  getAllTeam,
 } from "./db/index";
 
 const app: Application = express();
@@ -22,6 +23,12 @@ const checkId = async (req: Request, res: Response, next: NextFunction) => {
   }
   return res.status(400).json({ message: "Bad request" });
 };
+
+//return a list of all members
+app.get("/api/team", async (_req: Request, res: Response) => {
+  const data = await getAllTeam();
+  return res.status(200).json(data);
+});
 
 //return a list of all
 app.get("/api/arch", async (_req: Request, res: Response) => {

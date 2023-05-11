@@ -5,12 +5,23 @@ import { v4 } from "uuid";
 import { ObjectId } from "mongodb";
 
 const database = process.env.DATABASE;
-const itemCollection = process.env.COLLECTION;
+const itemCollection = process.env.ITEMCOLLECTION;
+const teamCollection = process.env.TEAMCOLLECTION;
 
 const password = process.env.PASSWORD;
 const username = process.env.USERNAME;
 
 const dbPath = `mongodb+srv://${username}:${password}@myowncluster.yq33qsd.mongodb.net/?retryWrites=true&w=majority`;
+
+const getAllTeamDb = async () => {
+  const client: mongoDB.MongoClient = new mongoDB.MongoClient(dbPath);
+  await client.connect();
+  const db: mongoDB.Db = client.db(`${database}`);
+  const col: mongoDB.Collection = db.collection(`${teamCollection}`);
+  const data = await col.find().toArray();
+  await client.close();
+  return data;
+};
 
 const getAllItemsDb = async () => {
   const client: mongoDB.MongoClient = new mongoDB.MongoClient(dbPath);
@@ -88,4 +99,5 @@ export default {
   saveItemDb,
   updateItemDb,
   deleteItemDb,
+  getAllTeamDb,
 };
